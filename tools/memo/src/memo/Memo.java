@@ -1,7 +1,24 @@
+/*
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package memo;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 
 
 /**
@@ -19,22 +36,24 @@ public class Memo
     // newline
     final String NL = System.getProperty("line.separator");
     
+    private String filename = "Memo.doc";
+    
     
     public Memo(String[] args)
     {
       int mode = M_NL;
       checkInput(args);
-      String filename = "memo.doc";
+      //String name = filename + ".doc";
       try 
       {
         File in = new File(filename);
-        in.renameTo(new File("xmemo.bak"));
-        in = new File("xmemo.bak");
+        in.renameTo(new File(filename + ".bak"));
+        in = new File(filename + ".bak");
         BufferedReader inReader = new BufferedReader(new FileReader(in));
         File out = new File(filename);
         FileWriter outWriter = new FileWriter(out);
         // append to archWriter
-        FileWriter archWriter = new FileWriter("xmemo-arch.doc", true);
+        FileWriter archWriter = new FileWriter(filename + ".arch.txt", true);
         for (int i = 0; ; i++)
         {
           String line = inReader.readLine();
@@ -60,6 +79,7 @@ public class Memo
       }
       catch (Exception e)
       {
+        dbgOut("Unexp. " + e);
         e.printStackTrace();
       }
     }
@@ -81,9 +101,13 @@ public class Memo
     private void help()
     {
         dbgOut("main: usage:\n"  
-        +  "SYNTAX: java Memo [Options] \n"
-        +  "Example: Memo"
-        +  "Input: memo.doc, output: memo.bak, memo.doc, memo-arch.doc"
+        +  "SYNTAX: java Memo [options] filename \n"
+        +  "Example: Memo\n"
+        +  "Input: memo.doc\n"
+        +  "Output:\n"
+        +  "\t memo.doc.bak (backup of the original file)\n"
+        +  "\t memo.doc (the new cleaned file)\n"
+        +  "\t memo.doc.arch.txt (the archived lines)\n"
         +  "\n*** Options: ***\n"
         +  "/h\thelp\n"
         );
@@ -108,7 +132,7 @@ public class Memo
             }
             else // It is not an option, so it is the filename.
             {
-                //filename = args[i];
+                filename = args[i];
             }
         }
     }
