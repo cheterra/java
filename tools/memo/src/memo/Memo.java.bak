@@ -59,20 +59,9 @@ public class Memo
           String line = inReader.readLine();
           if (line == null) 
             break;
-          // enter OK state if
-          //   - blabla OK
-          // or
-          //   OK- blabla
-          if (line.startsWith("-") && line.endsWith("OK") || line.startsWith("OK"))
+          if (line.endsWith("OK"))
             mode = M_OK;
-          // enter NORMAL state if
-          //  - blabla
-          // or
-          //  T O D O
-          // or
-          //   empty line resets mode to 'normal'
-          String trimmed = line.trim();
-          if (trimmed.length() == 0 || trimmed.equals(NL) || trimmed.startsWith("-") || trimmed.startsWith("TODO"))
+          if (line.length() == 0 || line.equals(NL))
             mode = M_NL;
           line += "\n";
           switch(mode)
@@ -128,7 +117,7 @@ public class Memo
     /** Test if help needed and loop through arguments */
     public void checkInput(String[] args) 
     {
-        if (args.length == 0)
+        if (false && args.length == 0)
         {
             help();
             return;
